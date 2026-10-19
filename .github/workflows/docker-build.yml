@@ -54,7 +54,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: model
-          path: .
+          path: data/
 
       - name: Run Flask tests
         run: pytest -v
@@ -82,7 +82,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: model
-          path: .
+          path: data/
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
