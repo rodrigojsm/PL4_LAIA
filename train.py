@@ -2,6 +2,9 @@ from sklearn.datasets import load_iris
 from sklearn.linear_model import LogisticRegression
 import joblib
 
+# Ensure output directory exists
+os.makedirs("data", exist_ok=True)
+
 # Load dataset
 X, y = load_iris(return_X_y=True)
 
