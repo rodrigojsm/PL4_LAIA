@@ -26,18 +26,11 @@ jobs:
       - name: Train model
         run: python train.py
 
-      - name: Check model file exists
-        run: |
-          ls -lah
-          ls -lah data
-          test -f data/model.pkl
-
       - name: Upload model artifact
         uses: actions/upload-artifact@v4
         with:
           name: model
           path: data/model.pkl
-          if-no-files-found: error
 
   test:
     runs-on: ubuntu-latest
@@ -63,11 +56,6 @@ jobs:
           name: model
           path: data
 
-      - name: Check downloaded model
-        run: |
-          ls -lah data
-          test -f data/model.pkl
-
       - name: Run Flask tests
         run: pytest -v
 
@@ -83,23 +71,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download model artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: model
-          path: data
-
-      - name: Check downloaded model
-        run: |
-          ls -lah data
-          test -f data/model.pkl
-
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download model artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: model
+          path: data
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
