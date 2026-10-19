@@ -10,5 +10,9 @@ model = LogisticRegression(max_iter=200)
 model.fit(X, y)
 
 # Save model
-joblib.dump(model, "data/model.pkl")
+
+os.makedirs("data", exist_ok=True)
+
+with open("data/model.pkl", "wb") as f:
+    pickle.dump(model, f)
 print("✅ Model trained and saved as model.pkl")
