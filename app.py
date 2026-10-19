@@ -3,7 +3,10 @@ import joblib
 import numpy as np
 
 # Load trained model
-model = joblib.load("data/model.pkl")
+import pickle
+
+with open("data/model.pkl", "rb") as f:
+    model = pickle.load(f)
 
 app = Flask(__name__)
 
