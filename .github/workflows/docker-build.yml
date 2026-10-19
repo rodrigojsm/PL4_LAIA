@@ -71,6 +71,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Download model artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: model
+          path: data
+
+      - name: Check downloaded model
+        run: |
+          ls -lah data
+          test -f data/model.pkl
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -78,15 +89,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Download model artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: model
-          path: data
+      - name: Set lowercase image name
+        run: |
+          echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/ml-flask-app:latest" >> $GITHUB_ENV
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}/ml-flask-app:latest
+          tags: ${{ env.IMAGE_NAME }}
